@@ -28,6 +28,7 @@ const AdminLayout = ({ children }) => {
       key: "1",
       icon: <DashboardOutlined />,
       label: "Dashboard",
+      path: "/admin",
       onClick: () => {
         navigate(`/admin`);
       },
@@ -117,6 +118,7 @@ const AdminLayout = ({ children }) => {
       key: "12",
       icon: <ShoppingCartOutlined />,
       label: "Siparişler",
+      path: "/admin/orders",
       onClick: () => {
         navigate(`/admin/orders`);
       },
@@ -126,10 +128,26 @@ const AdminLayout = ({ children }) => {
       icon: <RollbackOutlined />,
       label: "Ana Sayfaya Git",
       onClick: () => {
-        window.location.href="/";
+        window.location.href = "/";
       },
     },
   ];
+
+  const getActiveKey = () => {
+    for (const item of menuItems) {
+      if (item.children) {
+        for (const child of item.children) {
+          if (child.path === window.location.pathname) {
+            return child.key;
+          }
+        }
+      } else {
+        if (item.path === window.location.pathname) {
+          return item.key;
+        }
+      }
+    }
+  };
 
   if (userRole === "admin") {
     return (
@@ -146,6 +164,7 @@ const AdminLayout = ({ children }) => {
                 height: "100%",
               }}
               items={menuItems}
+              defaultSelectedKeys={[getActiveKey()]}
             />
           </Sider>
           <Layout>
@@ -169,16 +188,14 @@ const AdminLayout = ({ children }) => {
                 }}
               >
                 {children}
-                
               </div>
             </Content>
           </Layout>
         </Layout>
       </div>
     );
-  }
-  else{
-    return (window.location.href ="/");
+  } else {
+    return (window.location.href = "/");
   }
 };
 
